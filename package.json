@@ -1,13 +1,20 @@
 {
 	"name": "@root/keypairs",
-	"version": "1.0.0-wip.0",
+	"version": "0.9.0",
 	"description": "Lightweight, Zero-Dependency RSA and EC/ECDSA crypto for Node.js and Browsers",
 	"main": "keypairs.js",
+	"browser": {
+		"./lib/node/keypairs.js": "./lib/browser/keypairs.js",
+		"./lib/node/ecdsa.js": "./lib/browser/ecdsa.js",
+		"./lib/node/rsa.js": "./lib/browser/rsa.js",
+		"./lib/node/sha2.js": "./lib/browser/sha2.js"
+	},
 	"scripts": {
 		"test": "node tests"
 	},
 	"files": [
 		"*.js",
+		"bin",
 		"lib",
 		"dist"
 	],
@@ -28,6 +35,8 @@
 	"author": "AJ ONeal <coolaj86@gmail.com> (https://coolaj86.com/)",
 	"license": "MPL-2.0",
 	"dependencies": {
-		"@root/acme": "^3.0.0-wip.0"
+		"@root/encoding": "^1.0.1",
+		"@root/pem": "^1.0.4",
+		"@root/x509": "^0.7.2"
 	}
 }

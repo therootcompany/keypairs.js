@@ -259,3 +259,49 @@ you'll want to take a look at the corresponding documentation:
 
 -   See ECDSA documentation at [Eckles.js](https://git.coolaj86.com/coolaj86/eckles.js/)
 -   See RSA documentation at [Rasha.js](https://git.coolaj86.com/coolaj86/rasha.js/)
+
+# Contributions
+
+Did this project save you some time? Maybe make your day? Even save the day?
+
+Please say "thanks" via Paypal or Patreon:
+
+-   Paypal: [\$5](https://paypal.me/rootprojects/5) | [\$10](https://paypal.me/rootprojects/10) | Any amount: <paypal@therootcompany.com>
+-   Patreon: <https://patreon.com/rootprojects>
+
+Where does your contribution go?
+
+[Root](https://therootcompany.com) is a collection of experts
+who trust each other and enjoy working together on deep-tech,
+Indie Web projects.
+
+Our goal is to operate as a sustainable community.
+
+Your contributions - both in code and _especially_ monetarily -
+help to not just this project, but also our broader work
+of [projects](https://rootprojects.org) that fuel the **Indie Web**.
+
+Also, we chat on [Keybase](https://keybase.io)
+in [#rootprojects](https://keybase.io/team/rootprojects)
+
+# Commercial Support
+
+Do you need...
+
+-   more features?
+-   bugfixes, on _your_ timeline?
+-   custom code, built by experts?
+-   commercial support and licensing?
+
+<!-- Please visit <https://therootcompany.com> or contact -->
+
+Contact <aj@therootcompany.com> for support options.
+
+# Legal
+
+Copyright [AJ ONeal](https://coolaj86.com),
+[Root](https://therootcompany.com) 2018-2019
+
+MPL-2.0 |
+[Terms of Use](https://therootcompany.com/legal/#terms) |
+[Privacy Policy](https://therootcompany.com/legal/#privacy)
