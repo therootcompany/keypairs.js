@@ -107,7 +107,7 @@ Keypairs.generate = function(opts) {
 	} else if (/^RSA$/i.test(opts.kty)) {
 		p = Rasha.generate(opts);
 	} else {
-		return Promise.Reject(
+		return Promise.reject(
 			new Error(
 				"'" +
 					opts.kty +
@@ -303,10 +303,6 @@ Keypairs.signJws = function(opts) {
 				protectedHeader = JSON.stringify(protect);
 			}
 
-			// Not sure how to handle the empty case since ACME POST-as-GET must be empty
-			//if (!payload) {
-			//  throw new Error("opts.payload should be JSON, string, or ArrayBuffer (it may be empty, but that must be explicit)");
-			//}
 			// Trying to detect if it's a plain object (not Buffer, ArrayBuffer, Array, Uint8Array, etc)
 			if (
 				payload &&
