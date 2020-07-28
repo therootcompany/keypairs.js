@@ -1,6 +1,6 @@
 {
 	"name": "@root/keypairs",
-	"version": "0.9.1",
+	"version": "0.10.0",
 	"description": "Lightweight, Zero-Dependency RSA and EC/ECDSA crypto for Node.js and Browsers",
 	"main": "keypairs.js",
 	"browser": {
