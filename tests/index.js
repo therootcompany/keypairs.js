@@ -4,7 +4,7 @@ var Keypairs = require('../');
 
 /* global Promise*/
 Keypairs.parseOrGenerate({ key: null })
-	.then(function(pair) {
+	.then(function (pair) {
 		// should NOT have any warning output
 		if (!pair.private || !pair.public) {
 			throw new Error('missing key pairs');
@@ -12,42 +12,42 @@ Keypairs.parseOrGenerate({ key: null })
 
 		return Promise.all([
 			// Testing Public Part of key
-			Keypairs.export({ jwk: pair.public }).then(function(pem) {
+			Keypairs.export({ jwk: pair.public }).then(function (pem) {
 				if (!/--BEGIN PUBLIC/.test(pem)) {
 					throw new Error('did not export public pem');
 				}
 				return Promise.all([
-					Keypairs.parse({ key: pem }).then(function(pair) {
+					Keypairs.parse({ key: pem }).then(function (pair) {
 						if (pair.private) {
 							throw new Error("shouldn't have private part");
 						}
 						return true;
 					}),
 					Keypairs.parse({ key: pem, private: true })
-						.then(function() {
+						.then(function () {
 							var err = new Error(
 								'should have thrown an error when private key was required and public pem was given'
 							);
 							err.code = 'NOERR';
 							throw err;
 						})
-						.catch(function(e) {
+						.catch(function (e) {
 							if ('NOERR' === e.code) {
 								throw e;
 							}
 							return true;
 						})
-				]).then(function() {
+				]).then(function () {
 					return true;
 				});
 			}),
 			// Testing Private Part of Key
-			Keypairs.export({ jwk: pair.private }).then(function(pem) {
+			Keypairs.export({ jwk: pair.private }).then(function (pem) {
 				if (!/--BEGIN .*PRIVATE KEY--/.test(pem)) {
 					throw new Error('did not export private pem: ' + pem);
 				}
 				return Promise.all([
-					Keypairs.parse({ key: pem }).then(function(pair) {
+					Keypairs.parse({ key: pem }).then(function (pair) {
 						if (!pair.private) {
 							throw new Error('should have private part');
 						}
@@ -56,7 +56,7 @@ Keypairs.parseOrGenerate({ key: null })
 						}
 						return true;
 					}),
-					Keypairs.parse({ key: pem, public: true }).then(function(
+					Keypairs.parse({ key: pem, public: true }).then(function (
 						pair
 					) {
 						if (pair.private) {
@@ -69,12 +69,12 @@ Keypairs.parseOrGenerate({ key: null })
 						}
 						return true;
 					})
-				]).then(function() {
+				]).then(function () {
 					return true;
 				});
 			}),
 			Keypairs.parseOrGenerate({ key: 'not a key', public: true }).then(
-				function(pair) {
+				function (pair) {
 					// SHOULD have warning output
 					if (!pair.private || !pair.public) {
 						throw new Error(
@@ -89,18 +89,18 @@ Keypairs.parseOrGenerate({ key: null })
 					return true;
 				}
 			),
-			Keypairs.parse({ key: JSON.stringify(pair.private) }).then(function(
-				pair
-			) {
-				if (!pair.private || !pair.public) {
-					throw new Error('missing key pairs (stringified jwt)');
+			Keypairs.parse({ key: JSON.stringify(pair.private) }).then(
+				function (pair) {
+					if (!pair.private || !pair.public) {
+						throw new Error('missing key pairs (stringified jwt)');
+					}
+					return true;
 				}
-				return true;
-			}),
+			),
 			Keypairs.parse({
 				key: JSON.stringify(pair.private),
 				public: true
-			}).then(function(pair) {
+			}).then(function (pair) {
 				if (pair.private) {
 					throw new Error("has private key when it shouldn't");
 				}
@@ -110,14 +110,14 @@ Keypairs.parseOrGenerate({ key: null })
 				return true;
 			}),
 			Keypairs.parse({ key: JSON.stringify(pair.public), private: true })
-				.then(function() {
+				.then(function () {
 					var err = new Error(
 						'should have thrown an error when private key was required and public jwk was given'
 					);
 					err.code = 'NOERR';
 					throw err;
 				})
-				.catch(function(e) {
+				.catch(function (e) {
 					if ('NOERR' === e.code) {
 						throw e;
 					}
@@ -130,7 +130,7 @@ Keypairs.parseOrGenerate({ key: null })
 				alg: 'ES256',
 				iss: 'https://example.com/',
 				exp: '1h'
-			}).then(function(jwt) {
+			}).then(function (jwt) {
 				var parts = jwt.split('.');
 				var now = Math.round(Date.now() / 1000);
 				var token = {
@@ -144,10 +144,10 @@ Keypairs.parseOrGenerate({ key: null })
 				}
 				throw new Error('token was not properly generated');
 			})
-		]).then(function(results) {
+		]).then(function (results) {
 			if (
 				results.length &&
-				results.every(function(v) {
+				results.every(function (v) {
 					return true === v;
 				})
 			) {
@@ -158,7 +158,7 @@ Keypairs.parseOrGenerate({ key: null })
 			}
 		});
 	})
-	.catch(function(e) {
+	.catch(function (e) {
 		console.error('Caught an unexpected (failing) error:');
 		console.error(e);
 		process.exit(1);

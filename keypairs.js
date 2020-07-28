@@ -9,7 +9,7 @@ var Rasha = require('./rsa.js');
 var Eckles = require('./ecdsa.js');
 var native = require('./lib/node/keypairs.js');
 
-Keypairs.parse = function(opts) {
+Keypairs.parse = function (opts) {
 	opts = opts || {};
 
 	var err;
@@ -21,7 +21,7 @@ Keypairs.parse = function(opts) {
 		try {
 			jwk = JSON.parse(opts.key);
 			p = Keypairs.export({ jwk: jwk })
-				.catch(function(e) {
+				.catch(function (e) {
 					pem = opts.key;
 					err = new Error(
 						"Not a valid jwk '" +
@@ -32,11 +32,11 @@ Keypairs.parse = function(opts) {
 					err.code = 'EINVALID';
 					return Promise.reject(err);
 				})
-				.then(function() {
+				.then(function () {
 					return jwk;
 				});
 		} catch (e) {
-			p = Keypairs.import({ pem: opts.key }).catch(function(e) {
+			p = Keypairs.import({ pem: opts.key }).catch(function (e) {
 				err = new Error(
 					'Could not parse key (type ' +
 						typeof opts.key +
@@ -53,10 +53,10 @@ Keypairs.parse = function(opts) {
 		p = Promise.resolve(opts.key);
 	}
 
-	return p.then(function(jwk) {
+	return p.then(function (jwk) {
 		var pubopts = JSON.parse(JSON.stringify(opts));
 		pubopts.jwk = jwk;
-		return Keypairs.publish(pubopts).then(function(pub) {
+		return Keypairs.publish(pubopts).then(function (pub) {
 			// 'd' happens to be the name of a private part of both RSA and ECDSA keys
 			if (opts.public || opts.publish || !jwk.d) {
 				if (opts.private) {
@@ -75,13 +75,13 @@ Keypairs.parse = function(opts) {
 	});
 };
 
-Keypairs.parseOrGenerate = function(opts) {
+Keypairs.parseOrGenerate = function (opts) {
 	if (!opts.key) {
 		return Keypairs.generate(opts);
 	}
 	opts.private = true;
-	return Keypairs.parse(opts).catch(function(e) {
-		return Keypairs.generate(opts).then(function(pair) {
+	return Keypairs.parse(opts).catch(function (e) {
+		return Keypairs.generate(opts).then(function (pair) {
 			pair.parseError = e;
 			return pair;
 		});
@@ -93,7 +93,7 @@ Keypairs._stance =
 	" properly and securely use non-standard crypto then you shouldn't need Bluecrypt anyway.";
 Keypairs._universal =
 	'Bluecrypt only supports crypto with standard cross-browser and cross-platform support.';
-Keypairs.generate = function(opts) {
+Keypairs.generate = function (opts) {
 	opts = opts || {};
 	var p;
 	if (!opts.kty) {
@@ -117,8 +117,8 @@ Keypairs.generate = function(opts) {
 			)
 		);
 	}
-	return p.then(function(pair) {
-		return Keypairs.thumbprint({ jwk: pair.public }).then(function(thumb) {
+	return p.then(function (pair) {
+		return Keypairs.thumbprint({ jwk: pair.public }).then(function (thumb) {
 			pair.private.kid = thumb; // maybe not the same id on the private key?
 			pair.public.kid = thumb;
 			return pair;
@@ -126,22 +126,22 @@ Keypairs.generate = function(opts) {
 	});
 };
 
-Keypairs.import = function(opts) {
+Keypairs.import = function (opts) {
 	return Eckles.import(opts)
-		.catch(function() {
+		.catch(function () {
 			return Rasha.import(opts);
 		})
-		.then(function(jwk) {
-			return Keypairs.thumbprint({ jwk: jwk }).then(function(thumb) {
+		.then(function (jwk) {
+			return Keypairs.thumbprint({ jwk: jwk }).then(function (thumb) {
 				jwk.kid = thumb;
 				return jwk;
 			});
 		});
 };
 
-Keypairs.export = function(opts) {
-	return Eckles.export(opts).catch(function(err) {
-		return Rasha.export(opts).catch(function() {
+Keypairs.export = function (opts) {
+	return Eckles.export(opts).catch(function (err) {
+		return Rasha.export(opts).catch(function () {
 			return Promise.reject(err);
 		});
 	});
@@ -153,10 +153,10 @@ native.export = Keypairs.export;
  * Chopping off the private parts is now part of the public API.
  * I thought it sounded a little too crude at first, but it really is the best name in every possible way.
  */
-Keypairs.neuter = function(opts) {
+Keypairs.neuter = function (opts) {
 	/** trying to find the best balance of an immutable copy with custom attributes */
 	var jwk = {};
-	Object.keys(opts.jwk).forEach(function(k) {
+	Object.keys(opts.jwk).forEach(function (k) {
 		if ('undefined' === typeof opts.jwk[k]) {
 			return;
 		}
@@ -169,8 +169,8 @@ Keypairs.neuter = function(opts) {
 	return jwk;
 };
 
-Keypairs.thumbprint = function(opts) {
-	return Promise.resolve().then(function() {
+Keypairs.thumbprint = function (opts) {
+	return Promise.resolve().then(function () {
 		if (/EC/i.test(opts.jwk.kty)) {
 			return Eckles.thumbprint(opts);
 		} else {
@@ -179,7 +179,7 @@ Keypairs.thumbprint = function(opts) {
 	});
 };
 
-Keypairs.publish = function(opts) {
+Keypairs.publish = function (opts) {
 	if ('object' !== typeof opts.jwk || !opts.jwk.kty) {
 		throw new Error('invalid jwk: ' + JSON.stringify(opts.jwk));
 	}
@@ -205,15 +205,15 @@ Keypairs.publish = function(opts) {
 	if (jwk.kid) {
 		return Promise.resolve(jwk);
 	}
-	return Keypairs.thumbprint({ jwk: jwk }).then(function(thumb) {
+	return Keypairs.thumbprint({ jwk: jwk }).then(function (thumb) {
 		jwk.kid = thumb;
 		return jwk;
 	});
 };
 
 // JWT a.k.a. JWS with Claims using Compact Serialization
-Keypairs.signJwt = function(opts) {
-	return Keypairs.thumbprint({ jwk: opts.jwk }).then(function(thumb) {
+Keypairs.signJwt = function (opts) {
+	return Keypairs.thumbprint({ jwk: opts.jwk }).then(function (thumb) {
 		var header = opts.header || {};
 		var claims = JSON.parse(JSON.stringify(opts.claims || {}));
 		header.typ = 'JWT';
@@ -260,14 +260,14 @@ Keypairs.signJwt = function(opts) {
 			protected: header,
 			header: undefined,
 			payload: claims
-		}).then(function(jws) {
+		}).then(function (jws) {
 			return [jws.protected, jws.payload, jws.signature].join('.');
 		});
 	});
 };
 
-Keypairs.signJws = function(opts) {
-	return Keypairs.thumbprint(opts).then(function(thumb) {
+Keypairs.signJws = function (opts) {
+	return Keypairs.thumbprint(opts).then(function (thumb) {
 		function alg() {
 			if (!opts.jwk) {
 				throw new Error("opts.jwk must exist and must declare 'typ'");
@@ -321,7 +321,7 @@ Keypairs.signJws = function(opts) {
 			var payload64 = Enc.bufToUrlBase64(payload);
 			var msg = protected64 + '.' + payload64;
 
-			return native._sign(opts, msg).then(function(buf) {
+			return native._sign(opts, msg).then(function (buf) {
 				var signedMsg = {
 					protected: protected64,
 					payload: payload64,
@@ -335,7 +335,7 @@ Keypairs.signJws = function(opts) {
 		if (opts.jwk) {
 			return sign();
 		} else {
-			return Keypairs.import({ pem: opts.pem }).then(function(pair) {
+			return Keypairs.import({ pem: opts.pem }).then(function (pair) {
 				opts.jwk = pair.private;
 				return sign();
 			});
@@ -346,7 +346,7 @@ Keypairs.signJws = function(opts) {
 // TODO expose consistently
 Keypairs.sign = native._sign;
 
-Keypairs._getBits = function(opts) {
+Keypairs._getBits = function (opts) {
 	if (opts.alg) {
 		return opts.alg.replace(/[a-z\-]/gi, '');
 	}

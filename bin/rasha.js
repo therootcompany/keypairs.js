@@ -29,7 +29,7 @@ if (
 		modulusLength: parseInt(format, 10) || 2048,
 		encoding: parseInt(format, 10) ? null : format
 	})
-		.then(function(key) {
+		.then(function (key) {
 			if ('der' === infile || 'der' === format) {
 				key.private = key.private.toString('binary');
 				key.public = key.public.toString('binary');
@@ -37,7 +37,7 @@ if (
 			console.info(key.private);
 			console.info(key.public);
 		})
-		.catch(function(err) {
+		.catch(function (err) {
 			console.error(err);
 			process.exit(1);
 		});
@@ -74,10 +74,10 @@ if ('string' === typeof key) {
 
 	var pub = -1 !== ['public', 'spki', 'pkix'].indexOf(format);
 	Rasha.import({ pem: key, public: pub || format })
-		.then(function(jwk) {
+		.then(function (jwk) {
 			console.info(JSON.stringify(jwk, null, 2));
 		})
-		.catch(function(err) {
+		.catch(function (err) {
 			console.error(err);
 			process.exit(1);
 		});
@@ -87,14 +87,14 @@ if ('string' === typeof key) {
 		return;
 	}
 	Rasha.export({ jwk: key, format: format })
-		.then(function(pem) {
+		.then(function (pem) {
 			if (sign) {
 				signMessage(pem, msg);
 				return;
 			}
 			console.info(pem);
 		})
-		.catch(function(err) {
+		.catch(function (err) {
 			console.error(err);
 			process.exit(2);
 		});

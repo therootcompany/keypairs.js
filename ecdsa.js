@@ -29,8 +29,8 @@ EC._universal =
 	'Bluecrypt only supports crypto with standard cross-browser and cross-platform support.';
 EC.generate = native.generate;
 
-EC.export = function(opts) {
-	return Promise.resolve().then(function() {
+EC.export = function (opts) {
+	return Promise.resolve().then(function () {
 		if (!opts || !opts.jwk || 'object' !== typeof opts.jwk) {
 			throw new Error('must pass { jwk: jwk } as a JSON object');
 		}
@@ -109,8 +109,8 @@ EC.export = function(opts) {
 };
 native.export = EC.export;
 
-EC.import = function(opts) {
-	return Promise.resolve().then(function() {
+EC.import = function (opts) {
+	return Promise.resolve().then(function () {
 		if (!opts || !opts.pem || 'string' !== typeof opts.pem) {
 			throw new Error('must pass { pem: pem } as a string');
 		}
@@ -178,18 +178,18 @@ EC.import = function(opts) {
 };
 native.import = EC.import;
 
-EC.pack = function(opts) {
-	return Promise.resolve().then(function() {
+EC.pack = function (opts) {
+	return Promise.resolve().then(function () {
 		return EC.export(opts);
 	});
 };
 
 // Chopping off the private parts is now part of the public API.
 // I thought it sounded a little too crude at first, but it really is the best name in every possible way.
-EC.neuter = function(opts) {
+EC.neuter = function (opts) {
 	// trying to find the best balance of an immutable copy with custom attributes
 	var jwk = {};
-	Object.keys(opts.jwk).forEach(function(k) {
+	Object.keys(opts.jwk).forEach(function (k) {
 		if ('undefined' === typeof opts.jwk[k]) {
 			return;
 		}
@@ -204,7 +204,7 @@ EC.neuter = function(opts) {
 native.neuter = EC.neuter;
 
 // https://stackoverflow.com/questions/42588786/how-to-fingerprint-a-jwk
-EC.__thumbprint = function(jwk) {
+EC.__thumbprint = function (jwk) {
 	// Use the same entropy for SHA as for key
 	var alg = 'SHA-256';
 	if (/384/.test(jwk.crv)) {
@@ -218,20 +218,20 @@ EC.__thumbprint = function(jwk) {
 		'","y":"' +
 		jwk.y +
 		'"}';
-	return sha2.sum(alg, payload).then(function(hash) {
+	return sha2.sum(alg, payload).then(function (hash) {
 		return Enc.bufToUrlBase64(Uint8Array.from(hash));
 	});
 };
 
-EC.thumbprint = function(opts) {
-	return Promise.resolve().then(function() {
+EC.thumbprint = function (opts) {
+	return Promise.resolve().then(function () {
 		var jwk;
 		if ('EC' === opts.kty) {
 			jwk = opts;
 		} else if (opts.jwk) {
 			jwk = opts.jwk;
 		} else {
-			return native.import(opts).then(function(jwk) {
+			return native.import(opts).then(function (jwk) {
 				return EC.__thumbprint(jwk);
 			});
 		}

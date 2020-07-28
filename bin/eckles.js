@@ -23,7 +23,7 @@ if (
 		namedCurve: format === 'P-384' ? 'P-384' : 'P-256',
 		encoding: format === 'der' ? 'der' : 'pem'
 	})
-		.then(function(key) {
+		.then(function (key) {
 			if ('der' === infile || 'der' === format) {
 				key.private = key.private.toString('binary');
 				key.public = key.public.toString('binary');
@@ -31,7 +31,7 @@ if (
 			console.log(key.private);
 			console.log(key.public);
 		})
-		.catch(function(err) {
+		.catch(function (err) {
 			console.error(err);
 			process.exit(1);
 		});
@@ -58,10 +58,10 @@ if ('string' === typeof key) {
 	}
 	var pub = -1 !== ['public', 'spki', 'pkix'].indexOf(format);
 	Eckles.import({ pem: key, public: pub || format })
-		.then(function(jwk) {
+		.then(function (jwk) {
 			console.log(JSON.stringify(jwk, null, 2));
 		})
-		.catch(function(err) {
+		.catch(function (err) {
 			console.error(err);
 			process.exit(1);
 		});
@@ -71,10 +71,10 @@ if ('string' === typeof key) {
 		return;
 	}
 	Eckles.export({ jwk: key, format: format })
-		.then(function(pem) {
+		.then(function (pem) {
 			console.log(pem);
 		})
-		.catch(function(err) {
+		.catch(function (err) {
 			console.error(err);
 			process.exit(2);
 		});

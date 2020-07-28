@@ -20,10 +20,10 @@ RSA.generate = native.generate;
 
 // Chopping off the private parts is now part of the public API.
 // I thought it sounded a little too crude at first, but it really is the best name in every possible way.
-RSA.neuter = function(opts) {
+RSA.neuter = function (opts) {
 	// trying to find the best balance of an immutable copy with custom attributes
 	var jwk = {};
-	Object.keys(opts.jwk).forEach(function(k) {
+	Object.keys(opts.jwk).forEach(function (k) {
 		if ('undefined' === typeof opts.jwk[k]) {
 			return;
 		}
@@ -38,7 +38,7 @@ RSA.neuter = function(opts) {
 native.neuter = RSA.neuter;
 
 // https://stackoverflow.com/questions/42588786/how-to-fingerprint-a-jwk
-RSA.__thumbprint = function(jwk) {
+RSA.__thumbprint = function (jwk) {
 	// Use the same entropy for SHA as for key
 	var len = Math.floor(jwk.n.length * 0.75);
 	var alg = 'SHA-256';
@@ -51,20 +51,20 @@ RSA.__thumbprint = function(jwk) {
 	}
 	return sha2
 		.sum(alg, '{"e":"' + jwk.e + '","kty":"RSA","n":"' + jwk.n + '"}')
-		.then(function(hash) {
+		.then(function (hash) {
 			return Enc.bufToUrlBase64(Uint8Array.from(hash));
 		});
 };
 
-RSA.thumbprint = function(opts) {
-	return Promise.resolve().then(function() {
+RSA.thumbprint = function (opts) {
+	return Promise.resolve().then(function () {
 		var jwk;
 		if ('EC' === opts.kty) {
 			jwk = opts;
 		} else if (opts.jwk) {
 			jwk = opts.jwk;
 		} else {
-			return RSA.import(opts).then(function(jwk) {
+			return RSA.import(opts).then(function (jwk) {
 				return RSA.__thumbprint(jwk);
 			});
 		}
@@ -72,8 +72,8 @@ RSA.thumbprint = function(opts) {
 	});
 };
 
-RSA.export = function(opts) {
-	return Promise.resolve().then(function() {
+RSA.export = function (opts) {
+	return Promise.resolve().then(function () {
 		if (!opts || !opts.jwk || 'object' !== typeof opts.jwk) {
 			throw new Error('must pass { jwk: jwk }');
 		}
@@ -152,16 +152,16 @@ RSA.export = function(opts) {
 };
 native.export = RSA.export;
 
-RSA.pack = function(opts) {
+RSA.pack = function (opts) {
 	// wrapped in a promise for API compatibility
 	// with the forthcoming browser version
 	// (and potential future native node capability)
-	return Promise.resolve().then(function() {
+	return Promise.resolve().then(function () {
 		return RSA.export(opts);
 	});
 };
 
-RSA._importSync = function(opts) {
+RSA._importSync = function (opts) {
 	if (!opts || !opts.pem || 'string' !== typeof opts.pem) {
 		throw new Error('must pass { pem: pem } as a string');
 	}
@@ -185,7 +185,7 @@ RSA.parse = function parseRsa(opts) {
 	// wrapped in a promise for API compatibility
 	// with the forthcoming browser version
 	// (and potential future native node capability)
-	return Promise.resolve().then(function() {
+	return Promise.resolve().then(function () {
 		return RSA._importSync(opts);
 	});
 };
