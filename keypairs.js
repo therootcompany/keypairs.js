@@ -218,7 +218,7 @@ Keypairs.signJwt = function (opts) {
 		var claims = JSON.parse(JSON.stringify(opts.claims || {}));
 		header.typ = 'JWT';
 
-		if (!header.kid && false !== header.kid) {
+		if (!header.kid && !header.jwk && false !== header.kid) {
 			header.kid = thumb;
 		}
 		if (!header.alg && opts.alg) {
@@ -294,11 +294,15 @@ Keypairs.signJws = function (opts) {
 				if (!protect.alg) {
 					protect.alg = alg();
 				}
+
 				// There's a particular request where ACME / Let's Encrypt explicitly doesn't use a kid
-				if (false === protect.kid) {
-					protect.kid = undefined;
-				} else if (!protect.kid) {
-					protect.kid = thumb;
+				// There should be a kid unless it's `false` or there's a `jwk` (a self-signed JWS)
+				if (!protect.kid) {
+					if (false === protect.kid) {
+						protect.kid = undefined;
+					} else if (!protect.jwk) {
+						protect.kid = thumb;
+					}
 				}
 				protectedHeader = JSON.stringify(protect);
 			}
