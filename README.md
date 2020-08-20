@@ -20,6 +20,8 @@ and [Rasha.js (RSA)](https://git.coolaj86.com/coolaj86/rasha.js/).
     -   [ ] Auth0
 -   [ ] CLI
     -   See [keypairs-cli](https://npmjs.com/packages/keypairs-cli/)
+-   [x] Node
+-   [x] Browsers (Webpack >=5)
 
 <!--
 
@@ -40,7 +42,7 @@ A brief introduction to the APIs:
 ```js
 // generate a new keypair as jwk
 // (defaults to EC P-256 when no options are specified)
-Keypairs.generate().then(function(pair) {
+Keypairs.generate().then(function (pair) {
 	console.log(pair.private);
 	console.log(pair.public);
 });
@@ -49,7 +51,7 @@ Keypairs.generate().then(function(pair) {
 ```js
 // JWK to PEM
 // (supports various 'format' and 'encoding' options)
-return Keypairs.export({ jwk: pair.private, format: 'pkcs8' }).then(function(
+return Keypairs.export({ jwk: pair.private, format: 'pkcs8' }).then(function (
 	pem
 ) {
 	console.log(pem);
@@ -58,14 +60,14 @@ return Keypairs.export({ jwk: pair.private, format: 'pkcs8' }).then(function(
 
 ```js
 // PEM to JWK
-return Keypairs.import({ pem: pem }).then(function(jwk) {
+return Keypairs.import({ pem: pem }).then(function (jwk) {
 	console.log(jwk);
 });
 ```
 
 ```js
 // Thumbprint a JWK (SHA256)
-return Keypairs.thumbprint({ jwk: jwk }).then(function(thumb) {
+return Keypairs.thumbprint({ jwk: jwk }).then(function (thumb) {
 	console.log(thumb);
 });
 ```
@@ -85,6 +87,67 @@ return Keypairs.signJwt({
 
 By default ECDSA keys will be used since they've had native support in node
 _much_ longer than RSA has, and they're smaller, and faster to generate.
+
+## Webpack 5+ (for Browsers)
+
+This package includes native browser versions of all special functions.
+
+Since Webpack 5 now fully supports vanilla JavaScript and exclusive browser builds out-of-the-box,
+it's pretty easy to create a minimal config to use Keypairs in your browser projects:
+
+`webpack.config.js`:
+
+```js
+'use strict';
+
+var path = require('path');
+
+module.exports = {
+	entry: './main.js',
+	mode: 'development',
+	devServer: {
+		contentBase: path.join(__dirname, 'dist'),
+		port: 3001
+	},
+	output: {
+		publicPath: 'http://localhost:3001/'
+	},
+	module: {
+		rules: [{}]
+	},
+	plugins: []
+};
+```
+
+`main.js`:
+
+```js
+'use strict';
+
+var Keypairs = require('./keypairs.js');
+
+Keypairs.generate().then(function (pair) {
+	console.log(pair.private);
+	console.log(pair.public);
+});
+```
+
+`index.html`:
+
+```html
+<!DOCTYPE html>
+<html>
+	<body>
+		<script src="./dist/main.js"></script>
+	</body>
+</html>
+```
+
+```bash
+npm install --save-dev webpack@5
+npx webpack
+ls dist/
+```
 
 ## API Overview
 
@@ -124,7 +187,7 @@ Option Examples:
 Example:
 
 ```js
-Keypairs.parse({ key: '...' }).catch(function(e) {
+Keypairs.parse({ key: '...' }).catch(function (e) {
 	// could not be parsed or was a public key
 	console.warn(e);
 	return Keypairs.generate();
@@ -145,7 +208,7 @@ Option Examples:
 Example:
 
 ```js
-Keypairs.parseOrGenerate({ key: process.env['PRIVATE_KEY'] }).then(function(
+Keypairs.parseOrGenerate({ key: process.env['PRIVATE_KEY'] }).then(function (
 	pair
 ) {
 	console.log(pair.public);
