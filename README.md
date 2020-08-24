@@ -149,8 +149,9 @@ npm install --save-dev webpack@5
 
 npm install --save-dev webpack-cli
 
-npx webpack
-ls dist/
+npx webpack --mode=production
+
+ls dist/main.js
 ```
 
 ## API Overview
