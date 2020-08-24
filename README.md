@@ -145,6 +145,10 @@ Keypairs.generate().then(function (pair) {
 
 ```bash
 npm install --save-dev webpack@5
+# Or, if webpack 5 is still in beta: npm install --save-dev webpack@next
+
+npm install --save-dev webpack-cli
+
 npx webpack
 ls dist/
 ```
