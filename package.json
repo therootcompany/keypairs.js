@@ -12,26 +12,12 @@
 	"scripts": {
 		"test": "node tests"
 	},
-	"files": [
-		"*.js",
-		"bin",
-		"lib",
-		"dist"
-	],
+	"files": ["*.js", "bin", "lib", "dist"],
 	"repository": {
 		"type": "git",
-		"url": "https://git.rootprojects.org/root/csr.js.git"
+		"url": "https://github.com/therootcompany/keypairs.js.git"
 	},
-	"keywords": [
-		"ASN.1",
-		"DER",
-		"PEM",
-		"x509",
-		"RSA",
-		"EC",
-		"ECDSA",
-		"asn1"
-	],
+	"keywords": ["ASN.1", "DER", "PEM", "x509", "RSA", "EC", "ECDSA", "asn1"],
 	"author": "AJ ONeal <coolaj86@gmail.com> (https://coolaj86.com/)",
 	"license": "MPL-2.0",
 	"dependencies": {
