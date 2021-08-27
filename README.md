@@ -1,4 +1,4 @@
-# @root/keypairs
+# [@root/keypairs](https://git.rootprojects.org/root/keypairs.js)
 
 Lightweight JavaScript RSA and ECDSA utils that work on Windows, Mac, and Linux
 using modern node.js APIs (no need for C compiler).
